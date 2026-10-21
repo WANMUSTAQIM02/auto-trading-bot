@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XAUUSD CYBER COMMAND TERMINAL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="flex flex-col p-4 md:p-8 space-y-6">
+
+    <header class="cyber-card p-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4 border-cyan-500/20">
+        <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></div>
+            <span class="text-cyan-400 font-bold text-base md:text-lg tracking-wider glow-text-cyan">
+                ⚡ XAUUSD CYBER COMMAND TERMINAL
+            </span>
+        </div>
+        <div class="flex items-center gap-3 text-xs">
+            <span class="bg-slate-900/80 border border-slate-700/60 px-3 py-1.5 rounded-lg text-cyan-300 font-mono">ASSET: XAUUSD (SPOT)</span>
+            <span class="bg-emerald-950/60 border border-emerald-500/30 px-3 py-1.5 rounded-lg text-emerald-400 flex items-center gap-2 font-bold font-mono">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> SECURE & LIVE
+            </span>
+        </div>
+    </header>
+
+    <main class="space-y-6 max-w-7xl mx-auto w-full">
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="cyber-card p-6 matrix-container border-amber-500/30 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-5">
+                        <span class="text-xs uppercase tracking-widest text-slate-400 font-bold font-mono">XAU/USD ANALYTICAL CORE</span>
+                        <div class="flex items-center gap-3">
+                            <span id="live-price" class="text-lg font-mono font-bold text-slate-100 glow-text-gold">${{ data.current_price }}</span>
+                            <span class="text-xs font-mono font-bold text-emerald-400 bg-emerald-950/60 px-2.5 py-1 rounded-md border border-emerald-500/30">LIVE SYNC</span>
+                        </div>
+                    </div>
+
+                    <div class="consensus-box p-4 rounded-xl flex items-center gap-4 mb-5 shadow-inner">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold text-xl">
+                            →
+                        </div>
+                        <div>
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-2xl font-bold tracking-wide text-amber-400">{{ data.consensus.overall_signal }}</span>
+                                <span class="text-2xl font-bold text-slate-200">{{ data.consensus.overall_pct }}</span>
+                            </div>
+                            <p class="text-tiny text-slate-400 tracking-wider uppercase mt-0.5">Konsensus Menyeluruh Pasaran</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 mb-6">
+                        <span class="bg-amber-500/10 text-amber-400 text-[10px] font-bold px-3 py-1 rounded-md border border-amber-500/30 uppercase tracking-wider">MAJORITY</span>
+                        <span class="bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-md border border-emerald-500/30 uppercase tracking-wider">FIB & HA ACTIVE</span>
+                        <span class="bg-slate-800/80 text-slate-300 text-[10px] font-bold px-3 py-1 rounded-md border border-slate-700">❖ M5 · M15 · H1</span>
+                    </div>
+
+                    <div class="space-y-3 font-mono">
+                        {% for eng in data.consensus.engines %}
+                        <div class="engine-card-box p-4 rounded-xl border flex justify-between items-center transition-all {% if eng.signal == 'BUY' %}border-emerald-500/40 text-emerald-400 bg-emerald-950/10{% elif eng.signal == 'SELL' %}border-rose-500/40 text-rose-400 bg-rose-950/10{% else %}border-amber-500/30 text-amber-400 bg-amber-950/10{% endif %}">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs opacity-60 font-bold">Engine {{ eng.id }}</span>
+                                <span class="text-xs font-sans font-semibold text-slate-200 tracking-wide">{{ eng.name }}</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-xs tracking-wider">{{ eng.signal }}</span>
+                                <span class="font-bold text-xs bg-slate-900/60 px-2 py-1 rounded border border-slate-800">{{ eng.pct_str }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card p-5 flex flex-col gap-4">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-bold glow-text-cyan">🌐 SIKLUS PASARAN</h2>
+                <div class="space-y-3">
+                    <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-bold">TOKYO</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.sessions.tokyo == 'OPEN' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% else %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% endif %}">{{ data.sessions.tokyo }}</span>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-bold">LONDON</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.sessions.london == 'OPEN' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% else %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% endif %}">{{ data.sessions.london }}</span>
+                    </div>
+                    <div class="bg-slate-900/60 border border-slate-800/80 p-3 rounded-xl flex justify-between items-center">
+                        <span class="text-xs text-slate-400 font-bold">NEW YORK</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.sessions.new_york == 'OPEN' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% else %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% endif %}">{{ data.sessions.new_york }}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="cyber-card p-4 overflow-hidden" style="height: 450px;">
+            <div class="tradingview-widget-container" style="height:100%; width:100%">
+                <div id="tradingview_xauusd" style="height:100%; width:100%"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                new TradingView.widget(
+                {
+                    "autosize": true,
+                    "symbol": "OANDA:XAUUSD",
+                    "interval": "15",
+                    "timezone": "Asia/Kuala_Lumpur",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "en",
+                    "enable_publishing": false,
+                    "backgroundColor": "rgba(15, 23, 42, 0.0)",
+                    "gridColor": "rgba(56, 189, 248, 0.05)",
+                    "hide_top_toolbar": false,
+                    "hide_legend": false,
+                    "save_image": false,
+                    "container_id": "tradingview_xauusd"
+                });
+                </script>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="cyber-card p-5 lg:col-span-2 flex flex-col justify-between">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 mb-4 font-bold glow-text-cyan">🧠 AI FUNDAMENTAL & US MACRO ANALYSIS</h2>
+                <div class="bg-slate-900/60 border border-slate-800/80 p-5 rounded-xl flex flex-col md:flex-row gap-6 items-start shadow-inner h-full">
+                    
+                    <div class="w-full md:w-1/3 space-y-4">
+                        <div>
+                            <p class="text-tiny text-slate-400 font-bold mb-1.5 uppercase tracking-wider">USD BIAS (DXY)</p>
+                            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if 'HAWKISH' in data.news_analysis.usd_bias %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% elif 'DOVISH' in data.news_analysis.usd_bias %}bg-rose-500/20 text-rose-400 border border-rose-500/30{% else %}bg-amber-500/20 text-amber-400 border border-amber-500/30{% endif %}">
+                                {{ data.news_analysis.usd_bias }}
+                            </span>
+                        </div>
+                        <div>
+                            <p class="text-tiny text-slate-400 font-bold mb-1.5 uppercase tracking-wider">XAUUSD IMPACT</p>
+                            <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if 'BUY' in data.news_analysis.xau_impact %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% elif 'SELL' in data.news_analysis.xau_impact %}bg-rose-500/20 text-rose-400 border border-rose-500/30{% else %}bg-amber-500/20 text-amber-400 border border-amber-500/30{% endif %}">
+                                {{ data.news_analysis.xau_impact }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="w-full md:w-2/3 border-t md:border-t-0 md:border-l border-slate-700/80 pt-4 md:pt-0 md:pl-5 flex flex-col justify-center">
+                        <p class="text-tiny text-cyan-400 font-bold mb-2 uppercase tracking-wider flex items-center gap-2">
+                            <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                            AI SUMMARY SYNTHESIS
+                        </p>
+                        <p class="text-sm text-slate-300 leading-relaxed font-mono">
+                            {{ data.news_analysis.summary }}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            
+            <div class="cyber-card p-5">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 mb-4 font-bold glow-text-cyan">🗓️ US ECONOMIC CALENDAR</h2>
+                <div class="space-y-2.5 overflow-y-auto max-h-[220px] pr-2 text-xs font-mono">
+                    {% if data.news_calendar %}
+                        {% for event in data.news_calendar %}
+                        <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 flex flex-col gap-1.5 hover:border-slate-600 transition-colors">
+                            <div class="flex justify-between items-center">
+                                <span class="text-cyan-400 font-bold tracking-wider">{{ event.date }} | {{ event.time }}</span>
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider {% if event.impact == 'High' %}bg-rose-500/20 text-rose-400 border border-rose-500/30{% elif event.impact == 'Medium' %}bg-amber-500/20 text-amber-400 border border-amber-500/30{% else %}bg-slate-700 text-slate-300{% endif %}">
+                                    {{ event.impact }}
+                                </span>
+                            </div>
+                            <span class="text-slate-200 font-semibold text-[11px]">{{ event.event }}</span>
+                            <div class="flex justify-between text-slate-500 text-[10px] mt-1 border-t border-slate-800/80 pt-1.5">
+                                <span>Prev: <b class="text-slate-400">{{ event.previous }}</b></span>
+                                <span>Fcst: <b class="text-amber-400">{{ event.forecast }}</b></span>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="flex h-full items-center justify-center p-8">
+                            <p class="text-slate-500 italic text-center text-sm">Tiada jadual data makro AS minggu ini.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="cyber-card p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-bold glow-text-cyan">⚡ MOMENTUM</h2>
+                        <span class="text-xs font-bold text-cyan-300 bg-cyan-950/60 px-2.5 py-1 rounded-md border border-cyan-500/30 font-mono">{{ data.gauge_status }}</span>
+                    </div>
+                    
+                    <div class="w-full bg-slate-950 border border-slate-800/80 rounded-full h-3.5 overflow-hidden flex mb-3 shadow-inner p-0.5" style="--b: {{ data.b_pct }}%; --n: {{ data.n_pct }}%; --s: {{ data.s_pct }}%;">
+                        <div class="bg-emerald-500 h-full rounded-l-full transition-all duration-500" style="width: var(--b);" title="Buy"></div>
+                        <div class="bg-amber-500 h-full transition-all duration-500" style="width: var(--n);" title="Neutral"></div>
+                        <div class="bg-rose-500 h-full rounded-r-full transition-all duration-500" style="width: var(--s);" title="Sell"></div>
+                    </div>
+                    
+                    <div class="flex justify-between text-xs font-mono text-slate-400 px-1">
+                        <span>BUY: <b class="text-emerald-400">{{ data.b_pct }}%</b></span>
+                        <span>NEUTRAL: <b class="text-amber-400">{{ data.n_pct }}%</b></span>
+                        <span>SELL: <b class="text-rose-400">{{ data.s_pct }}%</b></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card p-5 lg:col-span-2">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 mb-3 font-bold glow-text-cyan">📊 TIMEFRAME BIAS MATRIX</h2>
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-2.5 text-center">
+                    {% for tf, bias in data.tf_matrix.items() %}
+                    <div class="bg-slate-900/60 border border-slate-800/80 p-2.5 rounded-xl">
+                        <p class="text-tiny text-slate-400 font-bold uppercase tracking-wider">{{ tf }}</p>
+                        <p class="text-xs font-bold font-mono mt-1 {% if bias == 'BULLISH' %}text-emerald-400{% elif bias == 'BEARISH' %}text-rose-400{% else %}text-amber-400{% endif %}">{{ bias }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="cyber-card p-5">
+            <h2 class="text-xs uppercase tracking-widest text-cyan-400 mb-4 font-bold glow-text-cyan">🎯 MULTI-PROFILE INSTANT ENTRY</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-900/60 border border-slate-800/80 p-4 rounded-xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs text-cyan-400 font-bold">⚡ SCALPER (M1/M5)</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.scalp.signal == 'BUY' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% elif data.scalp.signal == 'SELL' %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% else %}bg-amber-500/10 text-amber-400 border border-amber-500/30{% endif %}">{{ data.scalp.signal }} (INSTANT)</span>
+                    </div>
+                    <div class="text-xs space-y-1.5 font-mono text-slate-300">
+                        <p class="flex justify-between"><span>ENTRY:</span> <span class="text-white font-bold">${{ data.scalp.entry }}</span></p>
+                        <p class="flex justify-between"><span>SL / TP:</span> <span class="text-rose-400">${{ data.scalp.sl }}</span> / <span class="text-emerald-400">${{ data.scalp.tp }}</span></p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/60 border border-cyan-500/30 p-4 rounded-xl shadow-lg">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs text-cyan-400 font-bold">🚀 INTRADAY (M15/H1)</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.intraday.signal == 'BUY' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% elif data.intraday.signal == 'SELL' %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% else %}bg-amber-500/10 text-amber-400 border border-amber-500/30{% endif %}">{{ data.intraday.signal }} (INSTANT)</span>
+                    </div>
+                    <div class="text-xs space-y-1.5 font-mono text-slate-300">
+                        <p class="flex justify-between"><span>ENTRY:</span> <span class="text-white font-bold">${{ data.intraday.entry }}</span></p>
+                        <p class="flex justify-between"><span>SL / TP:</span> <span class="text-rose-400">${{ data.intraday.sl }}</span> / <span class="text-emerald-400">${{ data.intraday.tp }}</span></p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/60 border border-slate-800/80 p-4 rounded-xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-xs text-cyan-400 font-bold">📈 SWING (H4/D1)</span>
+                        <span class="text-xs font-bold font-mono px-2.5 py-1 rounded {% if data.swing.signal == 'BUY' %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% elif data.swing.signal == 'SELL' %}bg-rose-500/10 text-rose-400 border border-rose-500/30{% else %}bg-amber-500/10 text-amber-400 border border-amber-500/30{% endif %}">{{ data.swing.signal }} (INSTANT)</span>
+                    </div>
+                    <div class="text-xs space-y-1.5 font-mono text-slate-300">
+                        <p class="flex justify-between"><span>ENTRY:</span> <span class="text-white font-bold">${{ data.swing.entry }}</span></p>
+                        <p class="flex justify-between"><span>SL / TP:</span> <span class="text-rose-400">${{ data.swing.sl }}</span> / <span class="text-emerald-400">${{ data.swing.tp }}</span></p>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-4 text-xs font-mono text-slate-400 border-t border-slate-800 pt-3">{{ data.reason }}</p>
+        </div>
+
+        <div class="cyber-card p-5">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-bold glow-text-cyan">🧪 HISTORICAL BACKTEST (1 TAHUN PENUH H1)</h2>
+                <span class="text-xs font-bold font-mono text-cyan-300 bg-cyan-950/60 px-3 py-1 rounded-md border border-cyan-500/30">Win Rate: {{ data.backtest.win_rate }}</span>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center font-mono text-xs">
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">TOTAL</p><p class="font-bold mt-1 text-slate-200 text-sm">{{ data.backtest.total }}</p></div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">WIN / LOSS</p><p class="font-bold mt-1 text-cyan-400 text-sm">{{ data.backtest.wins }}W / {{ data.backtest.losses }}L</p></div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">PROFIT FACTOR</p><p class="font-bold mt-1 text-emerald-400 text-sm">{{ data.backtest.profit_factor }}</p></div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">MAX DRAWDOWN</p><p class="font-bold mt-1 text-rose-400 text-sm">{{ data.backtest.max_drawdown }}</p></div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-800 col-span-2 sm:col-span-1"><p class="text-tiny text-slate-400">NET PROFIT</p><p class="font-bold mt-1 text-emerald-400 text-sm">{{ data.backtest.net_profit }}</p></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="cyber-card p-5">
+                <h2 class="text-xs uppercase tracking-widest text-cyan-400 mb-4 font-bold glow-text-cyan">🎯 ZON ORDER BLOCK & SND</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-emerald-950/20 border border-emerald-500/30 p-4 rounded-xl">
+                        <p class="text-tiny text-emerald-400 font-bold mb-1">BULLISH OB / DEMAND</p>
+                        <p class="font-mono font-bold text-emerald-200 text-sm">{{ data.order_blocks.bullish }}</p>
+                    </div>
+                    <div class="bg-rose-950/20 border border-rose-500/30 p-4 rounded-xl">
+                        <p class="text-tiny text-rose-400 font-bold mb-1">BEARISH OB / SUPPLY</p>
+                        <p class="font-mono font-bold text-rose-200 text-sm">{{ data.order_blocks.bearish }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cyber-card p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xs uppercase tracking-widest text-cyan-400 font-bold glow-text-cyan">📈 LIVE STATS (DB)</h2>
+                        <span class="text-xs font-bold font-mono text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/30">Rate: {{ data.win_rate.rate }}</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-3 text-center text-xs mb-4">
+                        <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">TOTAL</p><p class="font-bold mt-1 text-sm">{{ data.win_rate.total }}</p></div>
+                        <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">TP</p><p class="font-bold text-emerald-400 mt-1 text-sm">{{ data.win_rate.tp }}</p></div>
+                        <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">SL</p><p class="font-bold text-rose-400 mt-1 text-sm">{{ data.win_rate.sl }}</p></div>
+                        <div class="bg-slate-900/60 p-2.5 rounded-xl border border-slate-800"><p class="text-tiny text-slate-400">ACTIVE</p><p class="font-bold text-amber-400 mt-1 text-sm">{{ data.win_rate.active }}</p></div>
+                    </div>
+
+                    <div class="border-t border-slate-800/80 pt-4">
+                        <p class="text-tiny uppercase text-slate-400 mb-2 font-bold tracking-wider">📋 REKOD INSTANT ENTRY (DB)</p>
+                        <div class="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                            {% if data.win_rate.recent %}
+                                {% for sig in data.win_rate.recent %}
+                                <div class="bg-slate-900/80 border border-slate-800/80 p-3 rounded-xl flex flex-col gap-2 shadow-sm transition-all hover:border-slate-700">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex items-center gap-2">
+                                            <span class="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider {% if sig.signal == 'BUY' %}bg-emerald-500/20 text-emerald-400 border border-emerald-500/30{% else %}bg-rose-500/20 text-rose-400 border border-rose-500/30{% endif %}">
+                                                {{ sig.signal }}
+                                            </span>
+                                            <span class="text-slate-200 font-mono text-xs font-bold">@ ${{ sig.entry }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-1.5">
+                                            {% if sig.status == 'TP' %}
+                                                <span class="text-xs font-mono font-bold text-emerald-400">{{ sig.tp_hit }}</span>
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">HIT</span>
+                                            {% elif sig.status == 'SL' %}
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">STOP LOSS</span>
+                                            {% elif sig.status == 'RUNNING' %}
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">RUNNING</span>
+                                            {% else %}
+                                                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">PENDING</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center text-[10px] text-slate-500 font-mono border-t border-slate-800/80 pt-1.5 mt-0.5">
+                                        <span>🕒 Signal Keluar: <span class="text-slate-400">{{ sig.time }}</span></span>
+                                        <span>⏱️ Durasi: <span class="text-slate-400">{{ sig.duration }}</span></span>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-slate-500 text-center py-3 italic">Tiada rekod signal dalam pangkalan data.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="cyber-card p-4 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-2 border-slate-800/80 max-w-7xl mx-auto w-full mt-4">
+        <p>XAUUSD Cyber Command Terminal &copy; 2026 — Institutional Grade Analytics</p>
+        <p>Kemas kini: <span class="text-cyan-400 font-mono">{{ data.last_updated }}</span></p>
+    </footer>
+
+    <!-- Skrip WebSocket Live Sync untuk Harga Semasa -->
+    <script>
+        const ws = new WebSocket('wss://stream.binance.com:9443/ws/xauusdt@trade');
+        const priceEl = document.getElementById('live-price');
+        
+        ws.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            const livePrice = parseFloat(message.p).toFixed(2);
+            if (priceEl) {
+                const oldPrice = parseFloat(priceEl.innerText.replace('$', ''));
+                priceEl.innerText = '$' + livePrice;
+                
+                if (livePrice > oldPrice) {
+                    priceEl.className = "text-lg font-mono font-bold text-emerald-400 glow-text-cyan transition-colors";
+                } else if (livePrice < oldPrice) {
+                    priceEl.className = "text-lg font-mono font-bold text-rose-400 glow-text-gold transition-colors";
+                }
+            }
+        };
+    </script>
+</body>
+</html>
